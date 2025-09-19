@@ -141,9 +141,29 @@ fn push_elsewhere(app: &mut App, term: &mut Term, remote: &str) -> Res<()> {
     push(app, term, &[remote])
 }
 
+pub(crate) struct PushToTvlGerrit;
+impl OpTrait for PushToTvlGerrit {
+    fn get_action(&self, _target: &ItemData) -> Option<Action> {
+        Some(Rc::new(move |app: &mut App, term: &mut Term| {
+            push_head_to_gerrit(app, term, "origin", "canon")?;
+            Ok(())
+        }))
+    }
+
+    fn display(&self, _state: &State) -> String {
+        "to TVL gerrit".into()
+    }
+}
+
 fn push_head_to(app: &mut App, term: &mut Term, remote: &str, branch: &str) -> Res<()> {
     let head_ref = git::get_head_name(&app.state.repo)?;
     let refspec = format!("{head_ref}:refs/heads/{branch}");
+    push(app, term, &[remote, &refspec])
+}
+
+fn push_head_to_gerrit(app: &mut App, term: &mut Term, remote: &str, branch: &str) -> Res<()> {
+    let head_ref = git::get_head_name(&app.state.repo)?;
+    let refspec = format!("{head_ref}:refs/for/{branch}");
     push(app, term, &[remote, &refspec])
 }
 

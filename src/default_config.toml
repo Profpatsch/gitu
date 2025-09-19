@@ -164,6 +164,7 @@ push_menu.--dry-run = ["-n"]
 push_menu.push_to_push_remote = ["p"]
 push_menu.push_to_upstream = ["u"]
 push_menu.push_to_elsewhere = ["e"]
+push_menu.push_to_tvl_gerrit = ["R"]
 push_menu.quit = ["q", "esc"]
 
 root.rebase_menu = ["r"]
